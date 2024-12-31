@@ -1,15 +1,10 @@
 import { Router } from 'express';
-import { registerUser, loginUser, getUsers } from '../controllers/userController';
+import { registerUser, loginUser} from '../controllers/userController.js'; // Adjust the path as needed
 
 const router = Router();
 
-// User registration
 router.post('/register', registerUser);
-
-// User login
 router.post('/login', loginUser);
 
-// Get all users (for manager role)
-router.get('/', getUsers);
 
-export default router;
+export default router; // Default export

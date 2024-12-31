@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
-import { apiError } from "../utils/apiError";
-import { apiResponse } from "../utils/apiResponse";
-import { User } from "../models/user";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { User } from "../models/user.js";
 import jwt from "jsonwebtoken";
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler } from "../utils/asyncHandler.js";
+
+
 
 // Generate Access and Refresh Tokens
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -22,9 +24,10 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 // Register User
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, username, password,role } = req.body;
+  console.log("Incoming request body:", req.body);
+  const { fullName, email, username, password,role } = req.body;
 
-  if ([name, email, username, password,role].some((field) => !field?.trim())) {
+  if ([fullName, email, username, password,role].some((field) => !field?.trim())) {
     throw new apiError(400, "All fields are required");
   }
 
@@ -34,10 +37,12 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({
-    name,
     email,
+    fullName,
     password,
     username: username.toLowerCase(),
+    role
+
   });
 
   const createdUser = await User.findById(user._id).select("-password -refreshToken");

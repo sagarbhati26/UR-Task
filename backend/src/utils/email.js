@@ -9,12 +9,14 @@ const sendEmail = async (to, subject, text) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      logger:true,
+      debug:true,
     });
 
     // Mail options
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to,       // Use parameters passed to the function
+      to,      // Use parameters passed to the function
       subject,  // Use parameters passed to the function
       text,     // Use parameters passed to the function
     };
@@ -24,7 +26,7 @@ const sendEmail = async (to, subject, text) => {
     console.log('Email sent: ', info.response);
   } catch (error) {
     console.error('Error sending email:', error);
-    throw new Error('Email could not be sent');
+    throw new Error('Email could not be sent :${error}');
   }
 };
 

@@ -1,9 +1,9 @@
-import { Task } from "../models/task";
-import { User } from "../models/user";
-import { apiError } from "../utils/apiError";
-import { apiResponse } from "../utils/apiResponse";
-import { asyncHandler } from "../utils/asyncHandler";
-import { sendEmail } from "../utils/email";
+import  Task  from "../models/task.js";
+import { User } from "../models/user.js";
+import { apiError } from "../utils/apiError.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { sendEmail } from "../utils/email.js";
 
 // Assign a task
 const assignTask = asyncHandler(async (req, res) => {

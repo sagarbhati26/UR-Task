@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -10,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TaskDetails from "./components/Task/TaskDetails";
 import TaskList from "./components/Task/TaskList";
+import AssignTask from "./components/Task/AssignTask";
 
 // Helper function for protected routes
 const ProtectedRoute = ({ children, role }) => {
@@ -43,7 +49,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/tasks" element={<TaskList />} />
-<Route path="/tasks/:taskId" element={<TaskDetails />} />
+          <Route path="/tasks/:taskId" element={<TaskDetails />} />
 
           {/* Protected Routes */}
           <Route
@@ -59,6 +65,14 @@ function App() {
             element={
               <ProtectedRoute role="employee">
                 <EmployeeDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manager/assign-task"
+            element={
+              <ProtectedRoute role="manager">
+                <AssignTask />
               </ProtectedRoute>
             }
           />

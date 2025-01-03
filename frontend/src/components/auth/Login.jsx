@@ -11,32 +11,35 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const res = await axios.post("http://localhost:8008/api/v1/users/login", {
         email,
         password,
       });
-
-      // Destructure the response
-      const { role, accessToken } = res.data;
-
+  
+      // Extract the role from res.data
+      const {accessToken, user } = res.data.data;
+  
       // Save token and role in localStorage
       localStorage.setItem("token", accessToken);
-      localStorage.setItem("role", role);
-
-     
-      if(role==="manager"){
-        navigate("/Task/AssignTask")
-      }
-      else{
-        navigate("/Dashboard/EmployeeDashboard")
+      localStorage.setItem("role", user.role); // Use role from res.data
+  
+      // Navigate based on role
+      if (user.role === "manager") {
+        navigate("/Task/AssignTask"); // Update route to match your routing
+      } else if (user.role === "employee") {
+        navigate("/Dashboard/EmployeeDashboard"); // Update route to match your routing
+      } else {
+        console.error("Unknown role detected:", role);
+        alert("Unknown role. Please contact support.");
       }
     } catch (err) {
       console.error("Login error:", err.response?.data || err.message);
       alert("Login failed. Please check your credentials.");
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

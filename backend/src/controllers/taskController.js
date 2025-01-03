@@ -5,7 +5,7 @@ import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { sendEmail } from "../utils/email.js";
 
-// Assign a task
+//  Assign a task
 const assignTask = asyncHandler(async (req, res) => {
   const { title, description, assignedTo, dueDate, createdBy } = req.body;
 

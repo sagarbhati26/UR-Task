@@ -10,7 +10,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/login", { email, password });
+      const res = await axios.post("http://localhost:8008/api/v1/users/login", { email, password });
       localStorage.setItem("token", res.data.token);
       const role = res.data.role;
       navigate(role === "manager" ? "/manager" : "/employee");

@@ -13,16 +13,27 @@ import "react-toastify/dist/ReactToastify.css";
 const ProtectedRoute = ({ children, role }) => {
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role"); // Store user role during login
-  if (!token || userRole !== role) {
+
+  if (!token) {
+    console.warn("No token found. Redirecting to login.");
     return <Navigate to="/login" />;
   }
+
+  if (userRole !== role) {
+    console.warn("Unauthorized access. Redirecting to login.");
+    return <Navigate to="/login" />;
+  }
+
   return children;
 };
 
 function App() {
   return (
     <>
+      {/* Toast notifications */}
       <ToastContainer />
+
+      {/* Application Router */}
       <Router>
         <Routes>
           {/* Public Routes */}

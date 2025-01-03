@@ -8,6 +8,8 @@ import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
 import NotFound from "./Pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TaskDetails from "./components/Task/TaskDetails";
+import TaskList from "./components/Task/TaskList";
 
 // Helper function for protected routes
 const ProtectedRoute = ({ children, role }) => {
@@ -40,6 +42,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/tasks" element={<TaskList />} />
+<Route path="/tasks/:taskId" element={<TaskDetails />} />
 
           {/* Protected Routes */}
           <Route

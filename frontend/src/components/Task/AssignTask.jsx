@@ -3,9 +3,10 @@ import axios from "axios";
 
 const AssignTask = () => {
   const [taskDetails, setTaskDetails] = useState({
+    title: "",
     description: "",
     email: "",
-    deadline: "",
+    dueDate: "",
   });
 
   const handleInputChange = (e) => {
@@ -16,7 +17,7 @@ const AssignTask = () => {
   const assignTask = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:8008/api/v1/tasks/assign",
         taskDetails,
         {
@@ -25,11 +26,21 @@ const AssignTask = () => {
           },
         }
       );
+
       alert("Task assigned successfully!");
-      setTaskDetails({ description: "", email: "", deadline: "" }); // Reset form
+      console.log("Response:", response.data);
+      setTaskDetails({ title: "", description: "", email: "", dueDate: "", });
     } catch (error) {
-      alert("Failed to assign task. Please try again.");
-      console.error("Error assigning task:", error);
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+        alert(`Failed to assign task: ${error.response.data.message}`);
+      } else if (error.request) {
+        console.error("No response from server:", error.request);
+        alert("Failed to assign task. No response from server.");
+      } else {
+        console.error("Error:", error.message);
+        alert("Failed to assign task. An unexpected error occurred.");
+      }
     }
   };
 
@@ -41,10 +52,22 @@ const AssignTask = () => {
         </h2>
         <form onSubmit={assignTask} className="space-y-4">
           <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+              Task Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              placeholder="Enter task title"
+              value={taskDetails.title}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
               Task Description
             </label>
             <input
@@ -59,10 +82,7 @@ const AssignTask = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Employee Email
             </label>
             <input
@@ -77,17 +97,14 @@ const AssignTask = () => {
             />
           </div>
           <div>
-            <label
-              htmlFor="deadline"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Deadline
+            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700">
+              Due Date
             </label>
             <input
               type="date"
-              id="deadline"
-              name="deadline"
-              value={taskDetails.deadline}
+              id="dueDate"
+              name="dueDate"
+              value={taskDetails.dueDate}
               onChange={handleInputChange}
               required
               className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"

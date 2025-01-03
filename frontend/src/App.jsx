@@ -1,26 +1,24 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./Pages/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import ManagerDashboard from "./components/Dashboard/ManagerDashboard";
 import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
+import AssignTask from "./components/Task/AssignTask";
+import TaskDetails from "./components/Task/TaskDetails";
+import TaskList from "./components/Task/TaskList";
 import NotFound from "./Pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import TaskDetails from "./components/Task/TaskDetails";
-import TaskList from "./components/Task/TaskList";
-import AssignTask from "./components/Task/AssignTask";
 
 // Helper function for protected routes
 const ProtectedRoute = ({ children, role }) => {
   const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role"); // Store user role during login
+  const userRole = localStorage.getItem("role");
+
+  console.log("Protected Route: Token", token);
+  console.log("Protected Route: User Role", userRole);
 
   if (!token) {
     console.warn("No token found. Redirecting to login.");
@@ -28,7 +26,7 @@ const ProtectedRoute = ({ children, role }) => {
   }
 
   if (userRole !== role) {
-    console.warn("Unauthorized access. Redirecting to login.");
+    console.warn(`Unauthorized access. Required role: ${role}, User role: ${userRole}`);
     return <Navigate to="/login" />;
   }
 
@@ -38,10 +36,7 @@ const ProtectedRoute = ({ children, role }) => {
 function App() {
   return (
     <>
-      {/* Toast notifications */}
       <ToastContainer />
-
-      {/* Application Router */}
       <Router>
         <Routes>
           {/* Public Routes */}

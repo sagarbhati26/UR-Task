@@ -27,9 +27,9 @@ const Login = () => {
   
       // Navigate based on role
       if (user.role === "manager") {
-        navigate("/Task/AssignTask"); // Update route to match your routing
+        navigate("/manager/assign-task") // Update route to match your routing
       } else if (user.role === "employee") {
-        navigate("/Dashboard/EmployeeDashboard"); // Update route to match your routing
+        navigate("/employee"); // Update route to match your routing
       } else {
         console.error("Unknown role detected:", role);
         alert("Unknown role. Please contact support.");

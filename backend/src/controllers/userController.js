@@ -59,31 +59,38 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
 
+  // Validate input
   if (!username && !email) {
     throw new apiError(400, "Username or email is required");
   }
 
+  // Find user by username or email
   const user = await User.findOne({ $or: [{ username }, { email }] });
   if (!user) {
     throw new apiError(404, "User does not exist");
   }
 
+  // Verify password
   const isPasswordCorrect = await user.isPasswordCorrect(password);
   if (!isPasswordCorrect) {
     throw new apiError(401, "Invalid credentials");
   }
 
+  // Generate tokens
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
+  // Fetch user details to send in response
   const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
+  // Set cookie options
   const options = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
   };
 
+  // Send response
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
@@ -91,11 +98,17 @@ const loginUser = asyncHandler(async (req, res) => {
     .json(
       new apiResponse(
         200,
-        { user: loggedInUser, accessToken, refreshToken },
+        {
+          user: loggedInUser, // Ensure user object includes the role
+          accessToken,
+          refreshToken,
+          role:loggedInUser.role
+        },
         "User logged in successfully"
       )
     );
 });
+
 
 // Logout User
 const logoutUser = asyncHandler(async (req, res) => {

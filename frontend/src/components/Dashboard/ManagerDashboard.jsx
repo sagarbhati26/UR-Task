@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import AssignTask from "../Task/AssignTask";
 
 function ManagerDashboard() {
   const [tasks, setTasks] = useState([]);
@@ -25,12 +26,9 @@ function ManagerDashboard() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Manager Dashboard</h2>
           {/* Link to Assign Task */}
-          <Link
-            to="/manager/assign-task"
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300 focus:outline-none"
-          >
-            Assign New Task
-          </Link>
+          
+        <AssignTask/>
+         
         </div>
         {tasks.length === 0 ? (
           <p className="text-center text-gray-600">No tasks assigned yet.</p>

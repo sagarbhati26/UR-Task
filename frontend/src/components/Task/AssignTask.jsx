@@ -17,7 +17,7 @@ const AssignTask = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "http://localhost:5000/api/manager/tasks/assign",
+        "http://localhost:8008/api/v1/tasks/assign",
         taskDetails,
         {
           headers: {

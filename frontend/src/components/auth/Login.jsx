@@ -1,21 +1,40 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // React Router's useNavigate hook
 
-function Login() {
+
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+
+  const navigate = useNavigate(); // React Router's useNavigate hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await axios.post("http://localhost:8008/api/v1/users/login", { email, password });
-      localStorage.setItem("token", res.data.token);
-      const role = res.data.role;
-      navigate(role === "manager" ? "/manager" : "/employee");
+      const res = await axios.post("http://localhost:8008/api/v1/users/login", {
+        email,
+        password,
+      });
+
+      // Destructure the response
+      const { role, accessToken } = res.data;
+
+      // Save token and role in localStorage
+      localStorage.setItem("token", accessToken);
+      localStorage.setItem("role", role);
+
+     
+      if(role==="manager"){
+        navigate("/Task/AssignTask")
+      }
+      else{
+        navigate("/Dashboard/EmployeeDashboard")
+      }
     } catch (err) {
-      alert("Invalid credentials");
+      console.error("Login error:", err.response?.data || err.message);
+      alert("Login failed. Please check your credentials.");
     }
   };
 
@@ -24,6 +43,7 @@ function Login() {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Email Input */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email Address
@@ -31,13 +51,15 @@ function Login() {
             <input
               type="email"
               id="email"
-              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
+              placeholder="Enter your email"
               required
+              className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
             />
           </div>
+
+          {/* Password Input */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
@@ -45,13 +67,15 @@ function Login() {
             <input
               type="password"
               id="password"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
+              placeholder="Enter your password"
               required
+              className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
             />
           </div>
+
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300 focus:outline-none"
@@ -59,15 +83,9 @@ function Login() {
             Login
           </button>
         </form>
-        <p className="text-sm text-center text-gray-600">
-          Don't have an account?{" "}
-          <a href="/register" className="font-medium text-blue-600 hover:underline">
-            Register here
-          </a>
-        </p>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

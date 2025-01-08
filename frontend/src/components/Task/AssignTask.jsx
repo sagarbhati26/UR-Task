@@ -5,8 +5,9 @@ const AssignTask = () => {
   const [taskDetails, setTaskDetails] = useState({
     title: "",
     description: "",
-    email: "",
+    assignedTo: "", // Updated to match the backend field
     dueDate: "",
+    
   });
 
   const handleInputChange = (e) => {
@@ -29,7 +30,8 @@ const AssignTask = () => {
 
       alert("Task assigned successfully!");
       console.log("Response:", response.data);
-      setTaskDetails({ title: "", description: "", email: "", dueDate: "", });
+      // Reset form after successful submission
+      setTaskDetails({ title: "", description: "", assignedTo: "", dueDate: "" });
     } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response.data);
@@ -70,8 +72,7 @@ const AssignTask = () => {
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">
               Task Description
             </label>
-            <input
-              type="text"
+            <textarea
               id="description"
               name="description"
               placeholder="Enter task description"
@@ -79,18 +80,18 @@ const AssignTask = () => {
               onChange={handleInputChange}
               required
               className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
-            />
+            ></textarea>
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="assignedTo" className="block text-sm font-medium text-gray-700">
               Employee Email
             </label>
             <input
               type="email"
-              id="email"
-              name="email"
+              id="assignedTo"
+              name="assignedTo" // Updated to match the backend field
               placeholder="Enter employee's email"
-              value={taskDetails.email}
+              value={taskDetails.assignedTo}
               onChange={handleInputChange}
               required
               className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"

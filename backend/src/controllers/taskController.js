@@ -9,28 +9,31 @@ import { sendEmail } from "../utils/email.js";
 const assignTask = asyncHandler(async (req, res) => {
   const { title, description, assignedTo, dueDate, createdBy } = req.body;
 
-  // Check if assigned user exists
-  const employee = await User.findById(assignedTo);
+  // Check if the user exists by email
+  const employee = await User.findOne({ email: assignedTo });
   if (!employee) throw new apiError(404, "Employee not found");
 
-  // Create task
+  // Create the task, linking the employee's ID
   const task = await Task.create({
     title,
     description,
-    assignedTo,
+    assignedTo: employee._id, // Use the employee's ID here
     dueDate,
     createdBy,
   });
 
-  // Send email notification
+  // Send email notification to the assigned user
   await sendEmail(
     employee.email,
     "New Task Assigned",
     `Task: ${title}\nDue Date: ${dueDate}`
   );
 
-  res.status(201).json(new apiResponse(201, task, "Task assigned successfully"));
+  res
+    .status(201)
+    .json(new apiResponse(201, task, "Task assigned successfully"));
 });
+
 
 // Get all tasks
 const getTasks = asyncHandler(async (req, res) => {

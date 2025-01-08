@@ -141,12 +141,12 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findById(decodedToken._id);
+    const user = await User.findOne(decodedToken.email);
     if (!user || incomingRefreshToken !== user.refreshToken) {
       throw new apiError(401, "Invalid or expired refresh token");
     }
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user.email);
 
     const options = {
       httpOnly: true,
@@ -171,7 +171,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 const changeCurrentPassword = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
 
-  const user = await User.findById(req.user._id);
+  const user = await User.findOne(req.user.email);
   const isPasswordCorrect = await user.isPasswordCorrect(oldPassword);
 
   if (!isPasswordCorrect) {

@@ -9,7 +9,7 @@ const taskSchema = new Schema({
     type: String,
   },
   assignedTo: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: 'User',
     required: [true, 'Assigned employee is required'],
   },
@@ -22,11 +22,11 @@ const taskSchema = new Schema({
     type: Date,
     required: [true, 'Due date is required'],
   },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: [true, 'Manager is required'],
-  },
+  // createdBy: {
+  //   type: String,
+  //   ref: 'User',
+  //   required: [true, 'Manager is required'],
+  // },
 }, {
   timestamps: true,
 });

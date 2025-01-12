@@ -5,9 +5,10 @@ const AssignTask = () => {
   const [taskDetails, setTaskDetails] = useState({
     title: "",
     description: "",
-    assignedTo: "", // Updated to match the backend field
+    assignedTo: "", 
     dueDate: "",
-    
+    createdBy:""
+
   });
 
   const handleInputChange = (e) => {
@@ -31,7 +32,7 @@ const AssignTask = () => {
       alert("Task assigned successfully!");
       console.log("Response:", response.data);
       // Reset form after successful submission
-      setTaskDetails({ title: "", description: "", assignedTo: "", dueDate: "" });
+      setTaskDetails({ title: "", description: "", assignedTo: "", dueDate: "",createdBy:"" });
     } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response.data);
@@ -106,6 +107,20 @@ const AssignTask = () => {
               id="dueDate"
               name="dueDate"
               value={taskDetails.dueDate}
+              onChange={handleInputChange}
+              required
+              className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"
+            />
+          </div>
+          <div>
+          <label htmlFor="createdBy" className="block text-sm font-medium text-gray-700">
+              Created By
+            </label>
+            <input
+              type="email"
+              id="createdBy"
+              name="createdBy" // Updated to match the backend field
+              value={taskDetails.createdBy}
               onChange={handleInputChange}
               required
               className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-100 border rounded-lg focus:ring focus:ring-blue-300 focus:outline-none"

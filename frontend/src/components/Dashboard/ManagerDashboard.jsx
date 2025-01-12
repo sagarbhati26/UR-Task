@@ -9,7 +9,7 @@ function ManagerDashboard() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await axios.get("api", {
+        const res = await axios.get("", {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
         setTasks(res.data);

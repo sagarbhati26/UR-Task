@@ -5,17 +5,17 @@ import { validate } from '../middlewares/validationMiddleware.js';
 
 const router = Router();
 
-// Assign a task with validation
+
 router.post(
   '/assign',
  
   assignTask
 );
 
-// Get all tasks
-router.get('/', getTasks);
 
-// Update task status
+router.get('/gettasks', getTasks);
+
+
 router.put(
   '/:id/status',
   

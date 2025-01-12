@@ -22,11 +22,11 @@ const taskSchema = new Schema({
     type: Date,
     required: [true, 'Due date is required'],
   },
-  // createdBy: {
-  //   type: String,
-  //   ref: 'User',
-  //   required: [true, 'Manager is required'],
-  // },
+  createdBy: {
+    type: String,
+    ref: 'User',
+    required: [true, 'Manager is required'],
+  },
 }, {
   timestamps: true,
 });

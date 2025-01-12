@@ -5,7 +5,7 @@ import { apiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { sendEmail } from "../utils/email.js";
 
-//  Assign a task
+// Assign a task to an employee
 const assignTask = asyncHandler(async (req, res) => {
   const { title, description, assignedTo, dueDate, createdBy } = req.body;
 
@@ -35,11 +35,32 @@ const assignTask = asyncHandler(async (req, res) => {
 });
 
 
-// Get all tasks
+// Get all tasks  
 const getTasks = asyncHandler(async (req, res) => {
-  const tasks = await Task.find().populate("assignedTo createdBy", "name email");
+  // Check the logged-in user's role
+  const { role, email } = req.user; // Assuming req.user contains the logged-in user's details
+
+  let tasks;
+
+  if (role === "employee") {
+    // Fetch tasks assigned to the logged-in employee
+    tasks = await Task.find({ assignedTo: email }).populate(
+      "assignedTo createdBy",
+      "fullName email"
+    );
+  } else if (role === "manager") {
+    // Fetch all tasks created by the logged-in manager
+    tasks = await Task.find({ createdBy: email }).populate(
+      "assignedTo createdBy",
+      "fullName email"
+    );
+  } else {
+    throw new apiError(403, "Unauthorized access");
+  }
+
   res.status(200).json(new apiResponse(200, tasks, "Tasks fetched successfully"));
 });
+
 
 // Update task status
 const updateTaskStatus = asyncHandler(async (req, res) => {

@@ -8,7 +8,7 @@ const TaskList = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/tasks", {
+        const response = await axios.get("http://localhost:8008/api/v1/tasks/assign", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

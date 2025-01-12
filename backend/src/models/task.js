@@ -9,9 +9,17 @@ const taskSchema = new Schema({
     type: String,
   },
   assignedTo: {
-    type: String,
+    type: String,  // Keep as String to store email
     ref: 'User',
     required: [true, 'Assigned employee is required'],
+    validate: {
+      validator: async function(email) {
+        const User = this.model('User');
+        const user = await User.findOne({ email });
+        return user !== null;
+      },
+      message: 'Invalid employee email'
+    }
   },
   status: {
     type: String,
@@ -23,9 +31,17 @@ const taskSchema = new Schema({
     required: [true, 'Due date is required'],
   },
   createdBy: {
-    type: String,
+    type: String,  // Keep as String to store email
     ref: 'User',
     required: [true, 'Manager is required'],
+    validate: {
+      validator: async function(email) {
+        const User = this.model('User');
+        const user = await User.findOne({ email });
+        return user !== null;
+      },
+      message: 'Invalid manager email'
+    }
   },
 }, {
   timestamps: true,

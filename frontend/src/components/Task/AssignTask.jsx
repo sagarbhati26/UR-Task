@@ -30,7 +30,7 @@ const AssignTask = () => {
       );
 
       alert("Task assigned successfully!");
-      console.log("Response:", response.data);
+     
       // Reset form after successful submission
       setTaskDetails({ title: "", description: "", assignedTo: "", dueDate: "",createdBy:"" });
     } catch (error) {

@@ -20,10 +20,13 @@ const Login = () => {
   
       // Extract the role from res.data
       const {accessToken, user } = res.data.data;
+      console.log(user);
   
       // Save token and role in localStorage
       localStorage.setItem("token", accessToken);
-      localStorage.setItem("role", user.role); // Use role from res.data
+      localStorage.setItem("UserRole", user.role);
+      localStorage.setItem("UserEmail", user.email);
+       // Use role from res.data
   
       // Navigate based on role
       if (user.role === "manager") {

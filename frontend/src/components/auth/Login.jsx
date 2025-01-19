@@ -19,8 +19,8 @@ const Login = () => {
       });
   
       // Extract the role from res.data
-      const {accessToken, user } = res.data.data;
-      console.log(user);
+      const {accessToken, user } = res.data;
+      
   
       // Save token and role in localStorage
       localStorage.setItem("token", accessToken);
@@ -34,7 +34,7 @@ const Login = () => {
       } else if (user.role === "employee") {
         navigate("/employee"); // Update route to match your routing
       } else {
-        console.error("Unknown role detected:", role);
+       
         alert("Unknown role. Please contact support.");
       }
     } catch (err) {

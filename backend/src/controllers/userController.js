@@ -100,8 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
         200,
         {
           user: loggedInUser, // Ensure user object includes the role
-          accessToken,
-          refreshToken,
+          
           role:loggedInUser.role
         },
         "User logged in successfully"

@@ -6,8 +6,7 @@ import Register from "./components/auth/Register";
 import ManagerDashboard from "./components/Dashboard/ManagerDashboard";
 import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard";
 import AssignTask from "./components/Task/AssignTask";
-import TaskDetails from "./components/Task/TaskDetails";
-import TaskList from "./components/Task/TaskList";
+
 import NotFound from "./Pages/NotFound";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -43,8 +42,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/tasks" element={<TaskList />} />
-          <Route path="/tasks/:taskId" element={<TaskDetails />} />
+
 
           {/* Protected Routes */}
           <Route

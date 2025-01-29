@@ -14,10 +14,9 @@ import "react-toastify/dist/ReactToastify.css";
 // Helper function for protected routes
 const ProtectedRoute = ({ children, role }) => {
   const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
+  const userRole = localStorage.getItem("UserRole");
 
-  console.log("Protected Route: Token", token);
-  console.log("Protected Route: User Role", userRole);
+  
 
   if (!token) {
     console.warn("No token found. Redirecting to login.");

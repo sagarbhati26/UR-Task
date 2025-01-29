@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // React Router's useNavigate hook
-
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const navigate = useNavigate(); // React Router's useNavigate hook
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,26 +14,28 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:8008/api/v1/users/login", {
         email,
-        password,
+        password
       });
   
-      // Extract the role from res.data
-      const {accessToken, user } = res.data;
-      
+      console.log("API Response:", res.data); // Debugging output
+  
+      // Ensure response contains the expected structure
+      if (!res.data || !res.data.data || !res.data.data.user) {
+        throw new Error("Invalid response from server");
+      }
+  
+      const { accessToken, user } = res.data.data; // Corrected path
   
       // Save token and role in localStorage
       localStorage.setItem("token", accessToken);
       localStorage.setItem("UserRole", user.role);
-      localStorage.setItem("UserEmail", user.email);
-       // Use role from res.data
   
       // Navigate based on role
       if (user.role === "manager") {
-        navigate("/manager/assign-task") // Update route to match your routing
+        navigate("/manager/assign-task");
       } else if (user.role === "employee") {
-        navigate("/employee"); // Update route to match your routing
+        navigate("/employee");
       } else {
-       
         alert("Unknown role. Please contact support.");
       }
     } catch (err) {
@@ -49,14 +50,13 @@ const Login = () => {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email Input */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
               Email Address
             </label>
             <input
               type="email"
-              id="email"
+              id="UserEmail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
@@ -65,7 +65,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Password Input */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
@@ -81,7 +80,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring focus:ring-blue-300 focus:outline-none"

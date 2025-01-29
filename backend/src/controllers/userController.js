@@ -5,8 +5,6 @@ import { User } from "../models/user.js";
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
-
-
 // Generate Access and Refresh Tokens
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -24,10 +22,9 @@ const generateAccessAndRefreshTokens = async (userId) => {
 
 // Register User
 const registerUser = asyncHandler(async (req, res) => {
-  console.log("Incoming request body:", req.body);
-  const { fullName, email, username, password,role } = req.body;
+  const { fullName, email, username, password, role } = req.body;
 
-  if ([fullName, email, username, password,role].some((field) => !field?.trim())) {
+  if ([fullName, email, username, password, role].some((field) => !field?.trim())) {
     throw new apiError(400, "All fields are required");
   }
 
@@ -42,14 +39,9 @@ const registerUser = asyncHandler(async (req, res) => {
     password,
     username: username.toLowerCase(),
     role
-
   });
 
   const createdUser = await User.findById(user._id).select("-password -refreshToken");
-  if (!createdUser) {
-    throw new apiError(500, "Error registering user");
-  }
-
   return res
     .status(201)
     .json(new apiResponse(201, createdUser, "User registered successfully"));
@@ -80,7 +72,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
   // Fetch user details to send in response
-  const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
+  const loggedInUser = await User.findById(user._id).select("email role");
 
   // Set cookie options
   const options = {
@@ -90,6 +82,8 @@ const loginUser = asyncHandler(async (req, res) => {
     maxAge: 24 * 60 * 60 * 1000, // 1 day
   };
 
+  console.log("Logged in user", loggedInUser);
+  
   // Send response
   return res
     .status(200)
@@ -99,15 +93,12 @@ const loginUser = asyncHandler(async (req, res) => {
       new apiResponse(
         200,
         {
-          user: loggedInUser, // Ensure user object includes the role
-          
-          role:loggedInUser.role
+          user: loggedInUser,accessToken // Ensure user object includes the role
         },
         "User logged in successfully"
       )
     );
 });
-
 
 // Logout User
 const logoutUser = asyncHandler(async (req, res) => {

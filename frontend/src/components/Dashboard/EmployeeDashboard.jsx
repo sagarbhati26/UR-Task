@@ -11,16 +11,14 @@ function EmployeeDashboard() {
     const fetchTasks = async () => {
       try {
         // Get user email and role from localStorage or your auth state
-        const UserEmail = localStorage.getItem("email");
-        const UserRole = localStorage.getItem("role");
+        const UserEmail = localStorage.getItem("UserEmail");
+        const UserRole = localStorage.getItem("UserRole");
 
-        const res = await axios.get(
-          "http://localhost:8008/api/v1/tasks/gettasks",
-          {
-            email:UserEmail,
-          role:UserRole
+        const res = await axios.post(
+          `http://localhost:8008/api/v1/tasks/gettasks`,{
+            email: UserEmail,
+            role: UserRole
           },
-        
           {
             headers: { 
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -28,6 +26,7 @@ function EmployeeDashboard() {
             },
           }
         );
+        
       
         // Access the data properly from the response
         if (res.data.success && res.data.data) {

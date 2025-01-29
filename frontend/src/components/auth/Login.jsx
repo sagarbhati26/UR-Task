@@ -17,8 +17,6 @@ const Login = () => {
         password
       });
   
-      console.log("API Response:", res.data); // Debugging output
-  
       // Ensure response contains the expected structure
       if (!res.data || !res.data.data || !res.data.data.user) {
         throw new Error("Invalid response from server");

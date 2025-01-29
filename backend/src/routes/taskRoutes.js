@@ -13,7 +13,7 @@ router.post(
 );
 
 
-router.get('/gettasks', getTasks);
+router.post('/gettasks', getTasks);
 
 
 router.put(

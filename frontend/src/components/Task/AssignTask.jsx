@@ -7,7 +7,7 @@ const AssignTask = () => {
     description: "",
     assignedTo: "", 
     dueDate: "",
-    createdBy:""
+    createdBy:localStorage.getItem("UserEmail")
 
   });
 

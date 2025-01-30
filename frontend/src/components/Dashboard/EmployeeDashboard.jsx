@@ -1,4 +1,3 @@
-// EmployeeDashboard.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -10,12 +9,21 @@ function EmployeeDashboard() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        // Get user email and role from localStorage or your auth state
+        // Get user email and role from localStorage or auth state
         const UserEmail = localStorage.getItem("UserEmail");
         const UserRole = localStorage.getItem("UserRole");
 
+        console.log("Fetching tasks for:", UserEmail, UserRole); // Debugging
+
+        if (!UserEmail || !UserRole) {
+          setError("User details are missing. Please log in again.");
+          setLoading(false);
+          return;
+        }
+
         const res = await axios.post(
-          `http://localhost:8008/api/v1/tasks/gettasks`,{
+          `http://localhost:8008/api/v1/tasks/gettasks`,
+          {
             email: UserEmail,
             role: UserRole
           },
@@ -26,13 +34,14 @@ function EmployeeDashboard() {
             },
           }
         );
-        
-      
-        // Access the data properly from the response
-        if (res.data.success && res.data.data) {
+
+        console.log("API Response:", res.data); // Debugging
+
+        // Ensure response contains tasks
+        if (res.data.success && Array.isArray(res.data.data)) {
           setTasks(res.data.data);
         } else {
-          setError("No tasks found in response");
+          setError("No tasks found.");
         }
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch tasks");
@@ -40,14 +49,15 @@ function EmployeeDashboard() {
         setLoading(false);
       }
     };
+
     fetchTasks();
-  }, []);
+  }, []); // No dependencies to ensure it only runs once
 
   const updateTaskStatus = async (taskId) => {
     try {
       const res = await axios.put(
         `http://localhost:8008/api/v1/tasks/${taskId}/status`,
-        { status: "completed" }, // Changed from "complete" to match your backend
+        { status: "completed" },
         {
           headers: { 
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -58,7 +68,7 @@ function EmployeeDashboard() {
 
       if (res.data.success) {
         alert("Task marked as completed!");
-        // Update the local state with the new task status
+        // Update state to reflect task completion
         setTasks((prevTasks) =>
           prevTasks.map((task) =>
             task._id === taskId ? { ...task, status: "completed" } : task
